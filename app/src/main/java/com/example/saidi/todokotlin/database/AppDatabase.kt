@@ -6,13 +6,13 @@ import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import android.util.Log
 
-@Database(entities = arrayOf(AppDatabase::class), version = 1)
+@Database(entities = [AppDatabase::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
         private val LOCK = Any()
         const val DATABASE_NAME = "todolist"
-        val LOG_TAG = AppDatabase.javaClass.simpleName
+        val LOG_TAG = AppDatabase::class.java.simpleName
         private var INSTANCE: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase? {

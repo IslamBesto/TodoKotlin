@@ -15,7 +15,7 @@ interface TaskDao {
     fun updateTask(taskEntry: TaskEntry)
 
     @Query("SELECT * FROM task WHERE id = :id")
-    fun loadTaskById(id: Int): LiveData<TaskEntry>
+    fun loadTaskById(id: Int?): LiveData<TaskEntry>
 
 
 }
