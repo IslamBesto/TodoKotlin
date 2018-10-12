@@ -3,10 +3,12 @@ package com.example.saidi.todokotlin.database
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
+import android.arch.persistence.room.TypeConverters
 import android.content.Context
 import android.util.Log
 
 @Database(entities = [AppDatabase::class], version = 1)
+@TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
@@ -16,11 +18,9 @@ abstract class AppDatabase : RoomDatabase() {
         private var INSTANCE: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase? {
-            INSTANCE?.let {
-                synchronized(LOCK) {
-                    Log.d(LOG_TAG, "Creating new database instance")
-                    INSTANCE = Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, AppDatabase.DATABASE_NAME).build()
-                }
+            INSTANCE ?: synchronized(LOCK) {
+                Log.d(LOG_TAG, "Creating new database instance")
+                INSTANCE = Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, AppDatabase.DATABASE_NAME).build()
             }
             Log.d(LOG_TAG, "Getting the database instance")
             return INSTANCE
