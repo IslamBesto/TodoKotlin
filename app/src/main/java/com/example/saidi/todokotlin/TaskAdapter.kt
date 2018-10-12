@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.task_layout.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TaskAdapter(var mItemClickListener: ItemClickListener? = null, var mTaskEntries: List<TaskEntry>? = null, val mContext: Context? = null) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+class TaskAdapter(var mItemClickListener: ItemClickListener? = null, var mTaskEntries: List<TaskEntry>? = null) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     companion object {
         const val DATE_FORMAT = "dd/MM/yyy"
@@ -23,10 +23,11 @@ class TaskAdapter(var mItemClickListener: ItemClickListener? = null, var mTaskEn
     fun setTasks(taskEntries: List<TaskEntry>?) {
         mTaskEntries = taskEntries
         notifyDataSetChanged()
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): TaskAdapter.TaskViewHolder {
-        val view = LayoutInflater.from(mContext).inflate(R.layout.task_layout, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.task_layout, parent, false)
         return TaskViewHolder(view)
     }
 
@@ -38,23 +39,18 @@ class TaskAdapter(var mItemClickListener: ItemClickListener? = null, var mTaskEn
         val taskEntry = mTaskEntries?.get(position)
         holder.bind(taskEntry)
         val priorityCircle: GradientDrawable = holder.itemView.priorityTextView.background as GradientDrawable
-        val priorityColor = getPriorityColor(taskEntry?.priority)
+        val priorityColor = getPriorityColor(taskEntry?.priority, holder.itemView.context)
         priorityCircle.setColor(priorityColor)
     }
 
-    private fun getPriorityColor(priority: Int?): Int {
+    private fun getPriorityColor(priority: Int?, context: Context): Int {
         val priorityColor = 0
-        mContext?.let {
-            return when (priority) {
-                1 -> ContextCompat.getColor(mContext, R.color.materialRed)
-                2 -> ContextCompat.getColor(mContext, R.color.materialOrange)
-                3 -> ContextCompat.getColor(mContext, R.color.materialYellow)
-                else -> priorityColor
-
-            }
-        } ?: run {
-            return priorityColor
-        }
+        return ContextCompat.getColor(context, when (priority) {
+            1 -> R.color.materialRed
+            2 -> R.color.materialOrange
+            3 -> R.color.materialYellow
+            else -> priorityColor
+        })
     }
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {

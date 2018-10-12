@@ -2,13 +2,13 @@ package com.example.saidi.todokotlin
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.widget.Toast
 import com.example.saidi.todokotlin.database.AppDatabase
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         recyclerViewTasks.layoutManager = LinearLayoutManager(this)
-        taskAdapter = TaskAdapter(this, mContext = this)
+        taskAdapter = TaskAdapter(this)
         val decoration = DividerItemDecoration(applicationContext, DividerItemDecoration.VERTICAL)
         recyclerViewTasks.adapter = taskAdapter
         recyclerViewTasks.addItemDecoration(decoration)
@@ -43,7 +43,8 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemClickListener {
         itemTouchHelper.attachToRecyclerView(recyclerViewTasks)
 
         fab.setOnClickListener {
-            Toast.makeText(baseContext, "click", Toast.LENGTH_LONG).show()
+            val addTaskIntent = Intent(this@MainActivity, AddTaskActivity::class.java)
+            startActivity(addTaskIntent)
         }
 
         setupViewModel()
@@ -58,6 +59,8 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemClickListener {
     }
 
     override fun onItemClickListener(itemId: Long?) {
-        Toast.makeText(baseContext, "click", Toast.LENGTH_LONG).show()
+        val intent = Intent(this, AddTaskActivity::class.java)
+        intent.putExtra(EXTRA_TASK_ID, itemId)
+        startActivity(intent)
     }
 }
