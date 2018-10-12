@@ -14,6 +14,9 @@ interface TaskDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateTask(taskEntry: TaskEntry)
 
+    @Delete
+    fun deleteTask(taskEntry: TaskEntry)
+
     @Query("SELECT * FROM task WHERE id = :id")
     fun loadTaskById(id: Int?): LiveData<TaskEntry>
 

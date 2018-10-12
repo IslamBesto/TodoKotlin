@@ -7,10 +7,6 @@ import com.example.saidi.todokotlin.database.TaskEntry
 class AddTaskViewModel(appDatabase: AppDatabase?, taskId: Int?) {
 
     private val TAG = MainViewModel::class.java.simpleName
-    val task: LiveData<TaskEntry>?
-
-    init {
-        task = appDatabase?.taskDAO()?.loadTaskById(taskId)
-    }
+    val task: LiveData<TaskEntry>? = appDatabase?.taskDAO()?.loadTaskById(taskId)
 
 }
